@@ -1,0 +1,33 @@
+name: Daily Weather Update
+
+on:
+  schedule:
+    - cron: "0 14 * * *"  # Runs daily at 10 AM EST (14:00 UTC)
+  workflow_dispatch:  # Allows manual runs
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install twilio
+
+    - name: Run Weather Script
+      env:
+        TWILIO_ACCOUNT_SID: ${{ AC94696fce2c1482f7fce2bfe59568e1ce }}
+        TWILIO_AUTH_TOKEN: ${{ db3642678b5e3a4c039f00e7e530cf65 }}
+        TWILIO_PHONE_NUMBER: ${{ +18555171243 }}
+        TO_PHONE_NUMBER: ${{ 9737380200 }}
+      run: python main.py
